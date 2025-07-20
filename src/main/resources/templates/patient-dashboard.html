@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">HealthTrack</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/patient/profile}">My Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/patient/book-appointment}">Book Appointment</a>
+                </li>
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post" class="form-inline">
+                        <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2 class="mb-4">Welcome, <span th:text="${patient.user.name}"></span>!</h2>
+
+        <div th:if="${param.bookingSuccess}" class="alert alert-success">
+            Appointment booked successfully!
+        </div>
+        <div th:if="${param.profileUpdated}" class="alert alert-success">
+            Profile updated successfully!
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        Upcoming Appointments
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${upcomingAppointments.isEmpty()}" class="alert alert-info">
+                            No upcoming appointments.
+                        </div>
+                        <ul class="list-group" th:if="${!upcomingAppointments.isEmpty()}">
+                            <li class="list-group-item" th:each="appointment : ${upcomingAppointments}">
+                                <span th:text="${appointment.appointmentDate}"></span> at <span th:text="${appointment.appointmentTime}"></span> with Dr. <span th:text="${appointment.doctor.user.name}"></span> (<span th:text="${appointment.status}"></span>)
+                                <br>
+                                <small>Reason: <span th:text="${appointment.reason}"></span></small>
+                            </li>
+                        </ul>
+                        <a th:href="@{/patient/book-appointment}" class="btn btn-sm btn-outline-primary mt-3">Book New Appointment</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        My Medical Records
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${medicalRecords.isEmpty()}" class="alert alert-info">
+                            No medical records found.
+                        </div>
+                        <div th:if="${!medicalRecords.isEmpty()}" class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Doctor</th>
+                                        <th>Notes</th>
+                                        <th>Prescription</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="record : ${medicalRecords}">
+                                        <td th:text="${#temporals.format(record.recordDate, 'dd-MM-yyyy HH:mm')}"></td>
+                                        <td th:text="${record.doctor.user.name}"></td>
+                                        <td th:text="${record.notes}"></td>
+                                        <td th:text="${record.prescription}"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

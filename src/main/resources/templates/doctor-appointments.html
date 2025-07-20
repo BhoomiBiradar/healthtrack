@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Doctor Appointments</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">HealthTrack</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/doctor/dashboard}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/doctor/patients}">Manage Patients</a>
+                </li>
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post" class="form-inline">
+                        <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2 class="mb-4">My Appointments</h2>
+
+        <div th:if="${param.statusUpdated}" class="alert alert-success">
+            Appointment status updated successfully!
+        </div>
+
+        <div th:if="${appointments.isEmpty()}" class="alert alert-info">
+            No appointments found.
+        </div>
+        <div th:if="${!appointments.isEmpty()}" class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Patient</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="appointment : ${appointments}">
+                        <td th:text="${appointment.appointmentDate}"></td>
+                        <td th:text="${appointment.appointmentTime}"></td>
+                        <td><a th:href="@{/doctor/patient/{patientId}/records(patientId=${appointment.patient.id})}" th:text="${appointment.patient.user.name}"></a></td>
+                        <td th:text="${appointment.reason}"></td>
+                        <td>
+                            <span class="badge"
+                                  th:classappend="${appointment.status.name() == 'PENDING' ? 'badge-warning' : (appointment.status.name() == 'CONFIRMED' ? 'badge-primary' : (appointment.status.name() == 'COMPLETED' ? 'badge-success' : 'badge-danger'))}"
+                                  th:text="${appointment.status}"></span>
+                        </td>
+                        <td>
+                            <form th:action="@{/doctor/appointments/update-status}" method="post" class="d-inline">
+                                <input type="hidden" name="appointmentId" th:value="${appointment.id}" />
+                                <input type="hidden" name="status" value="CONFIRMED" />
+                                <button type="submit" class="btn btn-sm btn-success" th:if="${appointment.status.name() == 'PENDING'}">Confirm</button>
+                            </form>
+                            <form th:action="@{/doctor/appointments/update-status}" method="post" class="d-inline ml-1">
+                                <input type="hidden" name="appointmentId" th:value="${appointment.id}" />
+                                <input type="hidden" name="status" value="CANCELLED" />
+                                <button type="submit" class="btn btn-sm btn-danger" th:if="${appointment.status.name() == 'PENDING' or appointment.status.name() == 'CONFIRMED'}">Cancel</button>
+                            </form>
+                            <a th:href="@{/doctor/patient/{patientId}/records(patientId=${appointment.patient.id})}" class="btn btn-sm btn-info ml-2">View Records</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

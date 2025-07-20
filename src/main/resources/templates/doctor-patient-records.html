@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${patient.user.name} + ' - Medical Records'">Medical Records</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">HealthTrack</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/doctor/dashboard}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/doctor/appointments}">My Appointments</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/doctor/patients}">Manage Patients</a>
+                </li>
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post" class="form-inline">
+                        <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2 class="mb-4">Medical Records for <span th:text="${patient.user.name}"></span></h2>
+
+        <div th:if="${param.recordAdded}" class="alert alert-success">
+            Medical record added successfully!
+        </div>
+        <div th:if="${param.recordUpdated}" class="alert alert-success">
+            Medical record updated successfully!
+        </div>
+
+        <a th:href="@{/doctor/patient/{patientId}/records/add(patientId=${patient.id})}" class="btn btn-success mb-3">Add New Record</a>
+        <a th:href="@{/doctor/patients}" class="btn btn-secondary mb-3 ml-2">Back to Patients List</a>
+
+        <div th:if="${medicalRecords.isEmpty()}" class="alert alert-info">
+            No medical records for this patient.
+        </div>
+        <div th:if="${!medicalRecords.isEmpty()}" class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Record Date</th>
+                        <th>Doctor</th>
+                        <th>Notes</th>
+                        <th>Prescription</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="record : ${medicalRecords}">
+                        <td th:text="${#temporals.format(record.recordDate, 'dd-MM-yyyy HH:mm')}"></td>
+                        <td th:text="${record.doctor.user.name}"></td>
+                        <td th:text="${record.notes}"></td>
+                        <td th:text="${record.prescription}"></td>
+                        <td>
+                            <a th:href="@{/doctor/record/{recordId}/edit(recordId=${record.id})}" class="btn btn-sm btn-warning">Edit</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

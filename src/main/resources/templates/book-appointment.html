@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Appointment</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">HealthTrack</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/patient/dashboard}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post" class="form-inline">
+                        <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2 class="mb-4">Book New Appointment</h2>
+
+        <div th:if="${errorMessage}" class="alert alert-danger">
+            <span th:text="${errorMessage}"></span>
+        </div>
+
+        <form th:action="@{/patient/book-appointment}" method="post">
+            <div class="form-group">
+                <label for="doctor">Select Doctor:</label>
+                <select id="doctor" name="doctorUserId" class="form-control" required>
+                    <option value="">-- Select a Doctor --</option>
+                    <option th:each="doctorUser : ${doctorUsers}"
+                            th:value="${doctorUser.id}"
+                            th:text="${doctorUser.name + ' (' + doctorUser.email + ')'}">
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="appointmentDate">Appointment Date:</label>
+                <input type="date" id="appointmentDate" name="appointmentDate" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="appointmentTime">Appointment Time:</label>
+                <input type="time" id="appointmentTime" name="appointmentTime" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="reason">Reason for Appointment:</label>
+                <textarea id="reason" name="reason" class="form-control" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Schedule Appointment</button>
+            <a th:href="@{/patient/dashboard}" class="btn btn-secondary ml-2">Cancel</a>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

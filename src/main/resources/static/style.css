@@ -1,0 +1,55 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #F8F9FA; 
+  color: #343A40; 
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 960px; 
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #FFFFFF;
+  border-radius: 8px; 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+}
+
+.login-container, .register-container {
+    max-width: 450px; 
+    margin: 4rem auto; 
+    padding: 2.5rem;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+}
+
+
+h1, h2 {
+  text-align: center;
+  color: #007BFF; 
+  margin-bottom: 1.5rem;
+}
+
+nav {
+}
+
+
+form input,
+form textarea,
+form select {
+  border-radius: 0.25rem; 
+}
+
+form button {
+  border-radius: 0.25rem; 
+}
+
+
+.table th, .table td {
+  vertical-align: middle;
+}
+
+
+.badge-warning { background-color: #ffc107; color: #212529; } 
+.badge-primary { background-color: #007bff; color: #fff; }   
+.badge-success { background-color: #28a745; color: #fff; }   
+.badge-danger { background-color: #dc3545; color: #fff; }    
