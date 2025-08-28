@@ -74,7 +74,9 @@
 #### Build and Run the Project
 - mvn clean install
 - mvn spring-boot:run
-- Visit the app at: http://localhost:8080
+- Visit the Live Deployed Application at: [Healthtrack Live Demo](https://healthtrack-production-d9fb.up.railway.app/login)
+
+  
 
 ## 🖥️ UI Screenshots
 
